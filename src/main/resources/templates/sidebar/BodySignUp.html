@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="headerfiles">
+	<meta charset="ISO-8859-1">
+</head>
+
+<body>
+	<!-- SingUp form Start -->
+	<div class="login-form" th:fragment="signupBody">
+		<!-- Message showing -->
+		<div th:if="${message}" class="alert alert-primary border-0" role="alert" th:text="${message}">
+			This content is displayed when the condition is true.
+		</div>
+		<div th:if="${errorMessage}" class="alert alert-danger border-0" role="alert" th:text="${errorMessage}">
+			This content is displayed when the condition is true.
+		</div>
+		
+		<form th:action="@{/sign-up}" method="post">
+			<div class="form-group">
+				<label>User Name</label>
+				<input type="text" class="form-control" name="userName" placeholder="User Name">
+			</div>
+			<div class="form-group">
+				<label>Password</label>
+				<input type="password" class="form-control" name="password" placeholder="Password">
+			</div>
+			<div class="form-group">
+				<label>Confirm Password</label>
+				<input type="password" name="confirmPassword" class="form-control" placeholder="Password">
+			</div>
+			<div class="checkbox">
+				<label>
+					<input type="checkbox"> Agree the terms and policy
+				</label>
+			</div>
+			<button type="submit" class="btn btn-success btn-flat m-b-30 m-t-30">Register</button>
+
+			<div class="register-link m-t-15 text-center">
+				<p>Already have account ?
+					<a href="#"> Sign in</a>
+				</p>
+			</div>
+		</form>
+	</div>
+	<!-- SingUp form end -->
+
+</body>
+
+</html>
