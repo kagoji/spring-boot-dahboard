@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="headerfiles">
+	<meta charset="ISO-8859-1">
+</head>
+
+<body>
+	<!-- section name start -->
+	<div th:fragment="Header">
+		<!-- header -->
+
+		<header class="main-header">
+			<div class="container_header">
+				<div class="logo">
+					<a href="#">
+						<strong class="logo_icon">
+							<img th:src="@{assets/images/small-logo.png}" alt="">
+						</strong>
+						<span class="logo-default">
+							<img th:src="@{assets/images/logo.png}" alt="">
+						</span>
+					</a>
+				</div>
+				<div class="right_detail">
+					<div class="row row d-flex align-items-center min-h pos-md-r">
+						<div class="col-xl-5 col-3 search_col ">
+							<div class="top_function d-md-flex align-items-md-center">
+								<div class="icon_menu">
+									<a href="#" class="menu-toggler sidebar-toggler">
+										<i class="icon-menu"></i>
+									</a>
+								</div>
+								
+							</div>
+						</div>
+						<div class="col-xl-7 col-9 d-flex justify-content-end">
+							<div class="right_bar_top d-flex align-items-center">
+								
+								<!-- Dropdown_User -->
+								<div class="dropdown dropdown-user">
+									<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"
+										data-hover="dropdown" data-close-others="true" aria-expanded="true">
+										<img class="img-circle pro_pic" th:src="@{assets/images/about-1.jpg}" alt="">
+										<span class="username"> Kiran </span>
+										<i class="fa fa-angle-down"></i>
+									</a>
+									<ul class="dropdown-menu dropdown-menu-default">
+										<li>
+											<a href="#">
+												<i class="icon-user"></i> Profile </a>
+										</li>
+										<li>
+											<a href="#">
+												<i class="icon-settings"></i> Settings </a>
+										</li>
+										<li>
+											<a href="#">
+												<i class="icon-directions"></i> Help </a>
+										</li>
+										<li class="divider"></li>
+										<li>
+											<a href="lock_screen.html">
+												<i class="icon-lock"></i> Lock </a>
+										</li>
+										<li>
+											<a href="@{/sign-out}">
+												<i class="icon-logout"></i> Log Out </a>
+										</li>
+									</ul>
+								</div>
+								<!-- Dropdown_User_End -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</header>
+		<!-- header_End -->
+		
+	</div>
+	<!-- section name End -->
+
+</body>
+
+</html>
