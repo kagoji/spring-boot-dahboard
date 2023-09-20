@@ -2,7 +2,6 @@ package com.kagoji.atfadashboard.controller;
 
 import java.security.Principal;
 
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,9 +28,9 @@ public class SystemAuthController {
 	
 	@ModelAttribute
 	public void Welcome(HttpServletRequest request,Model model) {
+		
 		String queryString = request.getQueryString();
-        System.out.println("SystemAuthController Query String: " + queryString);
-     // Get a specific query parameter (e.g., "message")
+		System.out.println("AdminController Query String: " + queryString);
         String message = request.getParameter("message");
         String errorMessage = request.getParameter("errorMessage");
         if (message != null) {
@@ -59,24 +58,21 @@ public class SystemAuthController {
 	}
 	
 	
-	//@GetMapping({"/", "/sign-in"})
-	@GetMapping("/sign-in")
+	@GetMapping({"/", "/sign-in"})
 	public String login(Model model,UserModel userModel) {
 		model.addAttribute(userModel);
 		return "pages/SignIn.html";
 	}
 	
 	@GetMapping("/temp")
-	public String dashboard() {
-		//return "pages/blank-page.html";
+	public String dashboard(Principal principal) {
+		
+	        if(principal.getName() != null) {
+	        	System.out.println("SystemAuthController Auth: " + principal.getName());
+	        }
 		return "pages/AdminDashboard.html";
 	}
 	
-	/*
-	 * @GetMapping("/admin/dashboard") public String dashboard(Model model,Principal
-	 * principal) { UserDetails userDetails =
-	 * userDetailsService.loadUserByUsername(principal.getName());
-	 * model.addAttribute(userDetails); return "pages/AdminDashboard.html"; }
-	 */
+	
 
 }
