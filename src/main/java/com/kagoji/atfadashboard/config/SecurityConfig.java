@@ -39,7 +39,7 @@ public class SecurityConfig {
 		
 		.authorizeHttpRequests(request -> request
 				.requestMatchers("/admin/**").hasAuthority("ADMIN")
-				.requestMatchers("/static/**", "/assets/**", "/templates/**", "/h2-console/**","/sign-in/**").permitAll()
+				.requestMatchers("/static/**", "/assets/css/**", "/assets/js/**","/assets/fonts/**","/assets/images/**","/templates/**", "/h2-console/**","/sign-in/**").permitAll()
 				.requestMatchers("/sign-up").permitAll()
 				.anyRequest().authenticated())
 		
