@@ -22,7 +22,7 @@
 		<div class="container-fluid">
 			<div class="row d-flex align-items-center">
 				<div class="col-md-6">
-					<div class="page-breadcrumb">
+					<div class="page-breadcrumb" th:text="${pageTitle}? ${pageTitle}:'' ">
 						<h1>Modal</h1>
 					</div>
 				</div>
@@ -34,7 +34,7 @@
 								<a class="parent-item" href="index.html">Home</a>
 								<i class="fa fa-angle-right"></i>
 							</li>
-							<li class="active">
+							<li class="active" th:text="${pageTitle}? ${pageTitle}:'' ">
 								Modal
 							</li>
 						</ol>

@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
 		user.setRole("ADMIN");
 		
 		userRepository.save(user);
-		return null;
+		return user;
 		
 	}
 
