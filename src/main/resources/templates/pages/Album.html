@@ -58,22 +58,36 @@
 										th:text="${errorMessage}">
 										This content is displayed when the condition is true.
 									</div>
-									<form th:action="@{/album/add}" method="post">
-										<div class="form-group">
-											<label for="InputAlbum">Album Name</label>
-											<input type="text" class="form-control" name="albumName" id="InputAlbum"
-												aria-describedby="emailHelp" placeholder="Enter Album name">
-										</div>
-
-										<button type="submit" class="btn btn-primary">ADD</button>
-									</form>
+									<div th:if="${albuminfo}">
+									    <form th:action="@{/album/edit/{id}(id=${albuminfo.albumUuid})}" method="post" th:object="${albuminfo}">
+											<div class="form-group">
+												<label for="InputAlbum">Album Name</label>
+												<input type="text" class="form-control" name="albumName" id="InputAlbum"
+													aria-describedby="emailHelp" placeholder="Enter Album name" th:value="${albuminfo.albumName}">
+											</div>
+	
+											<button type="submit" class="btn btn-primary">UPDATE</button>
+										</form>
+									</div>
+									<div th:unless="${albuminfo}">
+									    <form th:action="@{/album/add}" method="post">
+											<div class="form-group">
+												<label for="InputAlbum">Album Name</label>
+												<input type="text" class="form-control" name="albumName" id="InputAlbum"
+													aria-describedby="emailHelp" placeholder="Enter Album name">
+											</div>
+	
+											<button type="submit" class="btn btn-primary">ADD</button>
+										</form>
+									</div>
+									
 								</div>
 							</div>
 						</div>
 						<div class="col-sm-8">
 							<div class="card card-shadow mb-4">
 								<div class="card-header">
-									<div class="card-title" th:text="${pageTitle}? ${pageTitle + 'List'}:'' ">
+									<div class="card-title" th:text="${pageTitle}? ${pageTitle + ' List'}:'' ">
 										Default
 									</div>
 								</div>
@@ -113,13 +127,31 @@
 	<script type="text/javascript" th:href="@{/assets/js/jquery.dcjqaccordion.2.7.js}"></script>
 	<script type="text/javascript" th:href="@{/assets/js/custom.js}"></script>
 
+	
+	<script type="text/javascript">
+			$(document).ready(function () {
+	
+				$(".btn-delete").on("click", function (e) {
+					e.preventDefault();
+					link = $(this);
 
+					albumName = link.attr("albumName");
+					$("#yesBtn").attr("href", link.attr("href"));
+					$("#confirmText").html("Do you want to delete the Album \<strong\>" + albumName + "\<\/strong\>?");
+					$("#confirmModal").modal();
+				});
 
-	<script>
-		$(document).ready(function () {
-			$('#bs4-table').DataTable();
-		});
-	</script>
+				$("#btnClear").on("click", function (e) {
+					e.preventDefault();
+					$("#keyword").text("");
+					window.location = "[[@{/album/list}]]";
+				});
+			});
+
+			function changePageSize() {
+				$("#searchForm").submit();
+			}
+		</script>
 </body>
 
 </html>

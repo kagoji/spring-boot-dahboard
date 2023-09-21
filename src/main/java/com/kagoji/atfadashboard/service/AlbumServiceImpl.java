@@ -5,9 +5,9 @@ package com.kagoji.atfadashboard.service;
 import org.springframework.data.domain.Pageable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -23,16 +23,16 @@ public class AlbumServiceImpl implements AlbumService{
 	private AlbumRepository albumRepository;
 	
 	@Override
-	public Album saveAlbum(AlbumModel categoryModel) {
-		Album category = new Album();
-		category.setAlbumName(categoryModel.getAlbumName());
-		String slug = StringUtils.safeTrim(categoryModel.getAlbumName()).toLowerCase().replace(" ", "-");
-		category.setAlbumSlug(slug);
-		category.setAlbumSlug(slug);
-		category.setCreatedAt(new Date());
-		albumRepository.save(category);
+	public Album saveAlbum(AlbumModel albumModel) {
+		Album album = new Album();
+		album.setAlbumName(albumModel.getAlbumName());
+		String slug = StringUtils.safeTrim(albumModel.getAlbumName()).toLowerCase().replace(" ", "-");
+		album.setAlbumSlug(slug);
+		album.setAlbumSlug(slug);
+		album.setCreatedAt(new Date());
+		albumRepository.save(album);
 		
-		return category;
+		return album;
 	}
 	
 	@Override
@@ -57,6 +57,39 @@ public class AlbumServiceImpl implements AlbumService{
 		// TODO Auto-generated method stub
 		return albumRepository.findByAlbumNameContainingIgnoreCase(keyword, pageable);
 	}
+
+	@Override
+	public void deleteById(String id) {
+		albumRepository.deleteById(id);
+		
+	}
+
+	@Override
+	public Optional<Album> findAlbum(String id) {
+		// TODO Auto-generated method stub
+		return albumRepository.findById(id);
+	}
+
+	@Override
+	public Album updateAlbum(String id, AlbumModel albumModel) {
+		Album updateAlbum = albumRepository.getById(id);
+		updateAlbum.setAlbumName(albumModel.getAlbumName());
+		String slug = StringUtils.safeTrim(albumModel.getAlbumName()).toLowerCase().replace(" ", "-");
+		updateAlbum.setAlbumSlug(slug);
+		
+		albumRepository.save(updateAlbum);
+		
+		return updateAlbum;
+	}
+
+	@Override
+	public void updateAlbumStatus(String id, Integer status) {
+		Album updateAlbum = albumRepository.getById(id);
+		updateAlbum.setAlbumStatus(status);
+		albumRepository.save(updateAlbum);
+		
+	}
+
 	
 	
 }

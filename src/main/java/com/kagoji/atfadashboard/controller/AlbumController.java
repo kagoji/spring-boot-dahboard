@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -109,6 +110,7 @@ public class AlbumController {
             model.addAttribute("totalPages", albumPage.getTotalPages());
             model.addAttribute("totalItems", albumPage.getTotalElements());
             model.addAttribute("pageSize", size);
+            model.addAttribute("keyword", keyword);
             model.addAttribute("pageTitle", "Album");
 
         } catch (Exception e) {
@@ -119,9 +121,88 @@ public class AlbumController {
     }
 	
 	@PostMapping("/add")
-	 public String albumAdd(Model model,AlbumModel albumModel,RedirectAttributes redirectAttributes) { 
+	 public String albumAdd(
+			 Model model,AlbumModel albumModel,
+			 RedirectAttributes redirectAttributes
+	 ) { 
 		albumService.saveAlbum(albumModel);
 		redirectAttributes.addFlashAttribute("message", "Album has been added!!");
 		return "redirect:/album/list"; 
 	}
+	
+	 @GetMapping("/delete/{id}")
+	 public String deleteAlbum(
+			 @PathVariable("id") String id, 
+			 Model model, 
+			 RedirectAttributes redirectAttributes
+	 ) {
+	    try {
+	      albumService.deleteById(id);
+
+	      redirectAttributes.addFlashAttribute("message", "The Album has been deleted successfully!");
+	    } catch (Exception e) {
+	      redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+	    }
+
+	    return "redirect:/album/list";
+	  }
+	 
+	 @GetMapping("/edit/{id}")
+	 public String editAlbum(
+			 @PathVariable("id") String id, 
+			 Model model, 
+			 RedirectAttributes redirectAttributes,
+             @RequestParam(defaultValue = "1") int page,
+             @RequestParam(defaultValue = "3") int size
+	 ) {
+	    try {
+	    
+	      //Get album
+	      Album albuminfo = albumService.findAlbum(id).orElseThrow(() -> new IllegalArgumentException("Invalid Album ID"));
+	      model.addAttribute("albuminfo",albuminfo);
+	      
+	      //list data with pagination
+	      Pageable pageable = PageRequest.of(page - 1, size);
+          Page<Album> albumPage;
+          albumPage = albumService.findAllAlbumListWithPagination(pageable);
+          model.addAttribute("albums", albumPage.getContent());
+          model.addAttribute("currentPage", albumPage.getNumber() + 1);
+          model.addAttribute("totalPages", albumPage.getTotalPages());
+          model.addAttribute("totalItems", albumPage.getTotalElements());
+          model.addAttribute("pageSize", size);
+          model.addAttribute("pageTitle", "Edit Album");
+	    } catch (Exception e) {
+	      redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+	      return "redirect:/album/list";
+	    }
+
+	    return "pages/Album.html";
+	  }
+	 
+	 @PostMapping("/edit/{id}")
+	 public String albumUpdate(
+			 Model model,
+			 AlbumModel albumModel,
+			 @PathVariable("id") String id,
+			 RedirectAttributes redirectAttributes
+	 ) { 
+		albumService.updateAlbum(id,albumModel);
+		redirectAttributes.addFlashAttribute("message", "Album has been updated!!");
+		return "redirect:/album/list"; 
+	}
+	 
+	 @GetMapping("/{id}/published/{status}")
+	 public String albumPublishStatusChange(
+			 Model model,
+			 AlbumModel albumModel,
+			 @PathVariable("id") String id,
+			 @PathVariable("status") int status,
+			 RedirectAttributes redirectAttributes
+	 ) { 
+		albumService.updateAlbumStatus(id,status);
+		redirectAttributes.addFlashAttribute("message", "Album publish status has been changed!!");
+		return "redirect:/album/list"; 
+	}
+	 
+	 
 }

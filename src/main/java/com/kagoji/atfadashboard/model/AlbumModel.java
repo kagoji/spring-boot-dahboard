@@ -1,5 +1,7 @@
 package com.kagoji.atfadashboard.model;
 
+
+
 public class AlbumModel {
 	
 	private String albumName;

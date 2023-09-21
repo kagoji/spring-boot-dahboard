@@ -19,17 +19,18 @@
 	<!-- section name start -->
 	<div th:fragment="AlbumTable">
 		<div class="row">
-			<div class="col-sm-12 col-md-2 mt-2">
+			<form th:action="@{/album/list}" id="searchForm">
+				<div class="col-sm-12 col-md-2 mt-2">
 
-				<select form="searchForm" name="size" th:value="${pageSize}" onchange="changePageSize()"
-					class="custom-select custom-select-sm form-control form-control-sm" id="pageSize">
-					<option th:each="s : ${ {10, 25, 50,100} }" th:value="${s}" th:text="${s}"
-						th:selected="${s == pageSize}"></option>
-				</select>
+					<select form="searchForm" name="size" th:value="${pageSize}" onchange="changePageSize()"
+						class="custom-select custom-select-sm form-control form-control-sm" id="pageSize">
+						<option th:each="s : ${ {10, 25, 50,100} }" th:value="${s}" th:text="${s}"
+							th:selected="${s == pageSize}"></option>
+					</select>
 
-			</div>
-			<div class="col-sm-12 col-md-5 mt-2">
-				<form th:action="@{/album/list}" id="searchForm">
+				</div>
+				<div class="col-sm-12 col-md-5 mt-2">
+
 					<div class="input-group mb-4">
 						<!--<input type="text" class="form-control" placeholder="Search for..." aria-label="Search for...">-->
 						<input id="keyword" type="search" name="keyword" th:value="${keyword}" required
@@ -38,12 +39,12 @@
 							<button class="btn btn-info" type="submit">Search</button>
 						</span>
 					</div>
-				</form>
-			</div>
-			<div class="col-md-1 mt-2">
-				<button id="btnClear" class="btn btn-info">Clear</button>
-			</div>
 
+				</div>
+				<div class="col-md-1 mt-2">
+					<button id="btnClear" class="btn btn-info">Clear</button>
+				</div>
+			</form>
 		</div>
 
 		<div th:if="${totalItems > 0}">
@@ -57,7 +58,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="al,iter: ${albums}"> 
+					<tr th:each="al,iter: ${albums}">
 						<td th:text="${(currentPage - 1) * pageSize + iter.index + 1}"></td>
 						<td th:if="${al.albumName}" th:text="${al.albumName}"></td>
 						<td><span th:class="${al.albumStatus == 1} ? 'label label-success' : 'label label-warning'"
@@ -75,11 +76,12 @@
 											th:href="@{/album/edit/{id}(id=${al.albumUuid})}">
 											<i class="icon-note text-warning pr-2"></i> Edit</a>
 										<a class="dropdown-item" th:if="${al.albumUuid}"
-											th:href="@{/album/publish/{id}/status/{status}(id=${al.albumUuid},status=${al.albumStatus == 1}?0:1)}">
+											th:href="@{/album/{id}/published/{status}(id=${al.albumUuid},status=${al.albumStatus == 1}?0:1)}">
 											<i class="icon-flag text-info pr-2"></i> <span
 												th:text="${al.albumStatus == 1} ? 'Unpublish' : 'Publish'">Publish</span></a>
-										<a class="dropdown-item" th:if="${al.albumUuid}"
-											th:href="@{/album/delete/{id}(id=${al.albumUuid})}">
+										<a class="dropdown-item btn-delete" th:if="${al.albumUuid}"
+											th:href="@{/album/delete/{id}(id=${al.albumUuid})}"
+											th:albumName="${al.albumName}" title="Delete this album">
 											<i class="icon-close text-danger pr-2"></i> Remove</a>
 
 									</div>
@@ -121,7 +123,7 @@
 		<div th:unless="${totalItems > 0}">
 			<span>No albums found!</span>
 		</div>
-		
+
 		<!--Delete confirmation modal-->
 		<div class="modal fade text-center" id="confirmModal">
 			<div class="modal-dialog">
@@ -146,29 +148,7 @@
 		</div>
 
 
-		<script type="text/javascript">
-			$(document).ready(function () {
-				$(".btn-delete").on("click", function (e) {
-					e.preventDefault();
-					link = $(this);
 
-					tutorialTitle = link.attr("tutorialTitle");
-					$("#yesBtn").attr("href", link.attr("href"));
-					$("#confirmText").html("Do you want to delete the Tutorial \<strong\>" + tutorialTitle + "\<\/strong\>?");
-					$("#confirmModal").modal();
-				});
-
-				$("#btnClear").on("click", function (e) {
-					e.preventDefault();
-					$("#keyword").text("");
-					window.location = "[[@{/tutorials}]]";
-				});
-			});
-
-			function changePageSize() {
-				$("#searchForm").submit();
-			}
-		</script>
 
 	</div>
 
