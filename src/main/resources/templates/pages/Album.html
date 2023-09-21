@@ -41,7 +41,7 @@
 				<!-- start Page content Section -->
 				<div class="container-fluid">
 					<div class="row">
-						<div class="col-sm-6">
+						<div class="col-sm-4">
 							<div class=" card card-shadow mb-4">
 								<div class="card-header">
 									<div class="card-title" th:text="${pageTitle}? ${pageTitle}:'' ">
@@ -70,7 +70,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-sm-6">
+						<div class="col-sm-8">
 							<div class="card card-shadow mb-4">
 								<div class="card-header">
 									<div class="card-title" th:text="${pageTitle}? ${pageTitle + 'List'}:'' ">
@@ -78,23 +78,7 @@
 									</div>
 								</div>
 								<div class="card-body">
-									<table class="table">
-										<tr>
-											<th>ID</th>
-											<th>Name</th>
-											<th>Status</th>
-											<th>Action</th>
-										</tr>
-										<tr th:each="al,iter: ${albums}">
-											<td th:text="${iter.index + 1}"></td>
-											<td th:if="${al.albumName}" th:text="${al.albumName}"></td>
-											<td th:text="${al.albumStatus ==1}? 'Publish':'Unpublish'"></td>
-											<td>
-												<a th:if="${al.albumUuid}" th:href="@{/album/edit/{id}(id=${al.albumUuid})}">Edit</a>
-												<a th:if="${al.albumUuid}" th:href="@{/album/delete/{id}(id=${al.albumUuid})}">Delete</a>
-											</td>
-										</tr>
-									</table>
+									<div th:insert="fragments/DataTable.html :: AlbumTable"></div>
 								</div>
 							</div>
 						</div>
@@ -121,9 +105,21 @@
 		crossorigin="anonymous"></script>
 	<script type="text/javascript" th:href="@{/assets/js/bootstrap.min.js}"></script>
 	<script type="text/javascript" th:href="@{/assets/js/jquery.mCustomScrollbar.concat.min.js}"></script>
-	<script type="text/javascript" th:href="@{/assets/js/jquery.dcjqaccordion.2.7.js}"></script>
 
+	<!--datatables-->
+	<script th:href="@{/assets/js/jquery.dataTables.min.js}"></script>
+	<script th:href="@{/assets/js/dataTables.bootstrap4.min.js}"></script>
+
+	<script type="text/javascript" th:href="@{/assets/js/jquery.dcjqaccordion.2.7.js}"></script>
 	<script type="text/javascript" th:href="@{/assets/js/custom.js}"></script>
+
+
+
+	<script>
+		$(document).ready(function () {
+			$('#bs4-table').DataTable();
+		});
+	</script>
 </body>
 
 </html>

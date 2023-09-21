@@ -2,11 +2,13 @@ package com.kagoji.atfadashboard.service;
 
 
 
+import org.springframework.data.domain.Pageable;
 import java.util.ArrayList;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.kagoji.atfadashboard.entity.Album;
@@ -42,6 +44,18 @@ public class AlbumServiceImpl implements AlbumService{
 	public ArrayList<Album> findAllAlbumList() {
 		
 		return  (ArrayList<Album>) albumRepository.findAll();
+	}
+
+	@Override
+	public Page<Album> findAllAlbumListWithPagination(Pageable pageable) {
+		// TODO Auto-generated method stub
+		return albumRepository.findAll(pageable);
+	}
+
+	@Override
+	public Page<Album> searchAlbumsByKeyword(String keyword, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return albumRepository.findByAlbumNameContainingIgnoreCase(keyword, pageable);
 	}
 	
 	

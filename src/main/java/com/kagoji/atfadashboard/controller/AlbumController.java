@@ -1,10 +1,13 @@
 package com.kagoji.atfadashboard.controller;
 
+
 import java.security.Principal;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.kagoji.atfadashboard.entity.Album;
@@ -47,8 +51,8 @@ public class AlbumController {
 
 	}
 
-	@GetMapping("/list")
-	 public String albumMainPage(Model model,Principal principal,Album album) { 
+	/*@GetMapping("/list")
+	 public String albumMainPage(Model model,Principal principal,Album album,@RequestParam(required = false) String keyword,@RequestParam(defaultValue = "1") int page) { 
 		
 		UserDetails	  userDetails = userDetailsService.loadUserByUsername(principal.getName());
 		model.addAttribute(userDetails);
@@ -59,7 +63,60 @@ public class AlbumController {
 		model.addAttribute("albums", albums);
 		
 		return "pages/Album.html"; 
+		
+		
+		try {
+			ArrayList<Album> albums = new ArrayList<Album>();
+			Pageable paging = (Pageable) PageRequest.of(page-1, 10);
+			
+			Page<Album> pageAlb;
+			if(keyword==null) {
+				pageAlb = albumService.findAllAlbumLisWithPagination(paging);
+			}
+			
+			
+		}catch (Exception e) {
+			model.addAttribute("errorMessage", e.getMessage());
+		}
+		
+		
+		return "pages/Album.html"; 
 	}
+	*/
+	
+	
+	@GetMapping("/list")
+    public String albumMainPage(
+            Model model,
+            Principal principal,
+            Album album,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "3") int size
+    ) {
+        try {
+            Pageable pageable = PageRequest.of(page - 1, size);
+            Page<Album> albumPage;
+
+            if (keyword == null) {
+                albumPage = albumService.findAllAlbumListWithPagination(pageable);
+            } else {
+                albumPage = albumService.searchAlbumsByKeyword(keyword, pageable);
+            }
+            albumPage = albumService.findAllAlbumListWithPagination(pageable);
+            model.addAttribute("albums", albumPage.getContent());
+            model.addAttribute("currentPage", albumPage.getNumber() + 1);
+            model.addAttribute("totalPages", albumPage.getTotalPages());
+            model.addAttribute("totalItems", albumPage.getTotalElements());
+            model.addAttribute("pageSize", size);
+            model.addAttribute("pageTitle", "Album");
+
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", e.getMessage());
+        }
+
+        return "pages/Album.html";
+    }
 	
 	@PostMapping("/add")
 	 public String albumAdd(Model model,AlbumModel albumModel,RedirectAttributes redirectAttributes) { 
