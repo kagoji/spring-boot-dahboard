@@ -41,6 +41,8 @@ public class SecurityConfig {
 				.requestMatchers("/admin/**").hasAuthority("ADMIN")
 				.requestMatchers("/album/**").hasAuthority("ADMIN")
 				.requestMatchers("/static/**", "/assets/css/**", "/assets/js/**","/assets/fonts/**","/assets/images/**","/templates/**", "/h2-console/**","/sign-in/**").permitAll()
+				.requestMatchers("/change-password").authenticated()
+				.requestMatchers("/sign-out").authenticated()
 				.requestMatchers("/sign-up").permitAll()
 				.anyRequest().authenticated())
 		

@@ -51,39 +51,6 @@ public class AlbumController {
 		}
 
 	}
-
-	/*@GetMapping("/list")
-	 public String albumMainPage(Model model,Principal principal,Album album,@RequestParam(required = false) String keyword,@RequestParam(defaultValue = "1") int page) { 
-		
-		UserDetails	  userDetails = userDetailsService.loadUserByUsername(principal.getName());
-		model.addAttribute(userDetails);
-		model.addAttribute("pageTitle", "Album");
-		
-		ArrayList<Album> albums = new ArrayList<Album>();
-		albums = albumService.findAllAlbumList();
-		model.addAttribute("albums", albums);
-		
-		return "pages/Album.html"; 
-		
-		
-		try {
-			ArrayList<Album> albums = new ArrayList<Album>();
-			Pageable paging = (Pageable) PageRequest.of(page-1, 10);
-			
-			Page<Album> pageAlb;
-			if(keyword==null) {
-				pageAlb = albumService.findAllAlbumLisWithPagination(paging);
-			}
-			
-			
-		}catch (Exception e) {
-			model.addAttribute("errorMessage", e.getMessage());
-		}
-		
-		
-		return "pages/Album.html"; 
-	}
-	*/
 	
 	
 	@GetMapping("/list")
@@ -93,7 +60,7 @@ public class AlbumController {
             Album album,
             @RequestParam(required = false) String keyword,
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "3") int size
+            @RequestParam(defaultValue = "10") int size
     ) {
         try {
             Pageable pageable = PageRequest.of(page - 1, size);
