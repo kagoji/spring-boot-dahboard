@@ -21,10 +21,10 @@ import com.kagoji.atfadashboard.service.CustomUserDetailsServices;
 public class SecurityConfig {
 	
 	 @Autowired
-    public CustomSuccessHandler customSuccessHandler;
+    public CustomSuccessHandler customSuccessHandler; //After successful logged in route handler
 
     @Autowired
-    private CustomUserDetailsServices customUserDetailsServices;
+    private CustomUserDetailsServices customUserDetailsServices; //logged in user details get
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -40,7 +40,8 @@ public class SecurityConfig {
 		.authorizeHttpRequests(request -> request
 				.requestMatchers("/admin/**").hasAuthority("ADMIN")
 				.requestMatchers("/album/**").hasAuthority("ADMIN")
-				.requestMatchers("/static/**", "/assets/css/**", "/assets/js/**","/assets/fonts/**","/assets/images/**","/templates/**", "/h2-console/**","/sign-in/**").permitAll()
+				.requestMatchers("/image/**").hasAuthority("ADMIN")
+				.requestMatchers("/static/**", "/assets/css/**", "/assets/js/**","/assets/fonts/**","/assets/images/**","/templates/**", "/h2-console/**","/sign-in/**","/uploads/**").permitAll()
 				.requestMatchers("/change-password").authenticated()
 				.requestMatchers("/sign-out").authenticated()
 				.requestMatchers("/sign-up").permitAll()

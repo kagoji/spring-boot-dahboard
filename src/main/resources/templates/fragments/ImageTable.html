@@ -17,9 +17,9 @@
 
 <body>
 	<!-- section name start -->
-	<div th:fragment="AlbumTable">
+	<div th:fragment="ImageTable">
 		<div class="row">
-			<form th:action="@{/album/list}" id="searchForm">
+			<form th:action="@{/image/list}" id="searchForm">
 				<div class="col-sm-12 col-md-2 mt-2">
 
 					<select form="searchForm" name="size" th:value="${pageSize}" onchange="changePageSize()"
@@ -47,22 +47,22 @@
 			</form>
 		</div>
 
-		<div th:if="${totalItems > 0}">
+		<div >
 			<table id="bs4-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
 				<thead class="thead-light">
 					<tr>
-						<th scope="col">ID</th>
+						<th scope="col">Id</th>
 						<th scope="col">Name</th>
-						<th scope="col">Status</th>
+						<th scope="col">Image</th>
 						<th scope="col">Action</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="al,iter: ${albums}">
+					<tr th:if="${totalItems > 0}" th:each="im,iter: ${images}">
 						<td th:text="${(currentPage - 1) * pageSize + iter.index + 1}"></td>
-						<td th:if="${al.albumName}" th:text="${al.albumName}"></td>
-						<td><span th:class="${al.albumStatus == 1} ? 'label label-success' : 'label label-warning'"
-								th:text="${al.albumStatus == 1} ? 'Publish' : 'Unpublish'"></span>
+						<td th:if="${im.imageName}" th:text="${im.imageName}"></td>
+						<td th:if="${im.imageUrl}">
+							<img th:src="${im.imageUrl}" alt="${im.imageName}" style="width: 60px; height: 50px;" />
 						</td>
 						<td>
 							<div class="btn-group task-list-action">
@@ -72,22 +72,21 @@
 										<i class="icon-settings"></i>
 									</a>
 									<div class="dropdown-menu ">
-										<a class="dropdown-item" th:if="${al.albumUuid}"
-											th:href="@{/album/edit/{id}(id=${al.albumUuid})}">
+										<a class="dropdown-item" th:if="${im.id != null}"
+											th:href="@{/image/edit/{id}(id=${im.id})}">
 											<i class="icon-note text-warning pr-2"></i> Edit</a>
-										<a class="dropdown-item" th:if="${al.albumUuid}"
-											th:href="@{/album/{id}/published/{status}(id=${al.albumUuid},status=${al.albumStatus == 1}?0:1)}">
-											<i class="icon-flag text-info pr-2"></i> <span
-												th:text="${al.albumStatus == 1} ? 'Unpublish' : 'Publish'">Publish</span></a>
-										<a class="dropdown-item btn-delete" th:if="${al.albumUuid}"
-											th:href="@{/album/delete/{id}(id=${al.albumUuid})}"
-											th:albumName="${al.albumName}" title="Delete this album">
+										<a class="dropdown-item btn-delete" th:if="${im.id != null}"
+											th:href="@{/image/delete/{id}(id=${im.id})}"
+											th:albumName="${im.imageName}" title="Delete this Image">
 											<i class="icon-close text-danger pr-2"></i> Remove</a>
 
 									</div>
 								</div>
 							</div>
 						</td>
+					</tr>
+					<tr th:unless="${totalItems > 0}">
+						<td colspan="4">No data available</td>
 					</tr>
 				</tbody>
 
@@ -96,33 +95,33 @@
 			<nav aria-label="Pagination" th:if="${totalPages > 0}">
 				<ul class="pagination justify-content-center">
 					<li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
-						<a th:replace="fragments/paging :: paging(1, '<<', 'First Page','/album/list')"></a>
+						<a th:replace="fragments/paging :: paging(1, '<<', 'First Page','/image/list')"></a>
 					</li>
 					<li class="page-item font-weight-bold" th:classappend="${currentPage == 1} ? 'disabled'">
-						<a th:replace="fragments/paging :: paging(${currentPage - 1}, 'Prev', 'Previous Page','/album/list')"></a>
+						<a th:replace="fragments/paging :: paging(${currentPage - 1}, 'Prev', 'Previous Page','/image/list')"></a>
 					</li>
 					<li class="page-item disabled" th:if="${currentPage - 2 > 1}">
 						<a class="page-link" href="#">...</a>
 					</li>
 					<li class="page-item" th:classappend="${page == currentPage} ? 'active'"
 						th:each="page : ${#numbers.sequence(currentPage > 2 ? currentPage - 2 : 1, currentPage + 2 < totalPages ? currentPage + 2 : totalPages)}">
-						<a th:replace="fragments/paging :: paging(${page}, ${page}, 'Page ' + ${page},'/album/list')"></a>
+						<a th:replace="fragments/paging :: paging(${page}, ${page}, 'Page ' + ${page},'/image/list')"></a>
 					</li>
 					<li class="page-item disabled" th:if="${currentPage + 2 < totalPages}">
 						<a class="page-link" href="#">...</a>
 					</li>
 					<li class="page-item font-weight-bold" th:classappend="${currentPage == totalPages} ? 'disabled'">
-						<a th:insert="fragments/paging :: paging(${currentPage + 1},'Next', 'Next Page','/album/list')"></a>
+						<a th:insert="fragments/paging :: paging(${currentPage + 1},'Next', 'Next Page','/image/list')"></a>
 					</li>
 					<li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
-						<a th:replace="fragments/paging :: paging(${totalPages}, '>>', 'Last Page','/album/list')"></a>
+						<a th:replace="fragments/paging :: paging(${totalPages}, '>>', 'Last Page','/image/list')"></a>
 					</li>
 				</ul>
 			</nav>
 		</div>
-		<div th:unless="${totalItems > 0}">
+		<!--<div th:unless="${totalItems > 0}">
 			<span>No albums found!</span>
-		</div>
+		</div>-->
 
 		<!--Delete confirmation modal-->
 		<div class="modal fade text-center" id="confirmModal">

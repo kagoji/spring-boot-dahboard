@@ -19,8 +19,8 @@
 	<!-- section name start -->
 
 	<!--page title start-->
-	<a th:fragment="paging(pageNum, label, tooltip)" class="page-link"
-		th:href="@{'/album/list?' + ${keyword!=null && keyword!=''? 'keyword=' + keyword + '&' : ''} + 'page=' + ${pageNum} + '&size=' + ${pageSize}}"
+	<a th:fragment="paging(pageNum, label, tooltip,pageUrl)" class="page-link"
+		th:href="@{${pageUrl}+'?' + ${keyword!=null && keyword!=''? 'keyword=' + keyword + '&' : ''} + 'page=' + ${pageNum} + '&size=' + ${pageSize}}"
 		th:title="${tooltip}" rel="tooltip">
 		[[${label}]]
 	</a>
